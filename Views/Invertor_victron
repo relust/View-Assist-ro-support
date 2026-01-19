@@ -1,0 +1,105 @@
+  - type: panel
+    path: invertor
+    title: Invertor
+    icon: ''
+    cards:
+      - type: custom:button-card
+        variables:
+          invertorversion: 1.0.0
+          var_url: |-
+            [[[ try { return "http://192.168.0.138/gui-v2/" }
+                catch { return "https://www.home-assistant.io/" } ]]]
+          var_timeout_seconds: 0
+          var_setup_hold_mode: |-
+            [[[
+              const cleanup = () => {
+                if (window.vaHoldTimeout) clearTimeout(window.vaHoldTimeout);
+                window.vaHoldTimeout = null;
+                window.vaHoldModeSet = false;
+                window.vaPageKey = null;
+                window.vaStoredPreviousMode = null;
+                window.vaRevertMode = null;
+              };
+
+              if (variables.var_current_view !== 'invertor' || !variables.var_assistsat_entity) {
+                cleanup();
+                return '';
+              }
+
+              const currentPageKey = `${window.location.pathname}${window.location.search}`;
+              if (window.vaPageKey === currentPageKey && window.vaHoldTimeout) return '';
+
+              window.vaPageKey = currentPageKey;
+              const entityId = variables.var_assistsat_entity;
+
+              const vaEntity = hass.states[entityId];
+              const currentMode = vaEntity?.attributes?.mode || 'normal';
+              const previousMode = currentMode === 'hold' ? 'normal' : currentMode;
+              window.vaStoredPreviousMode = previousMode;
+
+              hass.callService('view_assist', 'set_state', {
+                entity_id: entityId,
+                mode: 'hold'
+              });
+              window.vaHoldModeSet = true;
+
+              const timeoutSeconds = variables.var_timeout_seconds || 0;
+              if (timeoutSeconds > 0) {
+                window.vaHoldTimeout = setTimeout(() => {
+                  try {
+                    hass.callService('view_assist', 'set_state', {
+                      entity_id: entityId,
+                      mode: window.vaStoredPreviousMode || 'normal'
+                    });
+                  } catch (e) {
+                    console.warn('View Assist hold revert failed:', e);
+                  } finally {
+                    cleanup();
+                  }
+                }, timeoutSeconds * 1000);
+              }
+
+              return '';
+            ]]]
+        template:
+          - variable_template
+          - body_template
+        styles:
+          card:
+            - background-color: '#000000'
+            - border-width: 0px
+            - border-radius: 0px
+          custom_fields:
+            iframe_field:
+              - height: 100%
+              - width: 100%
+              - position: absolute
+        custom_fields:
+          _hold_mode_init: '[[[ return variables.var_setup_hold_mode ]]]'
+          back_button:
+            card:
+              type: custom:button-card
+              icon: mdi:hand-back-left
+              show_name: false
+              styles:
+                card:
+                  - background: rgba(0,0,0,0.6)
+                  - border-radius: 50%
+                  - width: 3rem
+                  - height: 3rem
+                  - padding: 0
+                icon:
+                  - color: white
+                  - width: 1.75rem
+                  - height: 1.75rem
+              tap_action:
+                action: call-service
+                service: view_assist.navigate
+                service_data:
+                  device: '[[[ return variables.var_assistsat_entity ]]]'
+                  path: /view-assist
+          iframe_field:
+            card:
+              type: iframe
+              url: '[[[ return variables.var_url ]]]'
+              aspect_ratio: 50%
