@@ -159,8 +159,8 @@ action:
         weather_states:
           sunny: "Este însorit"
           clear-night: "Este noapte senină"
-          cloudy: "Este înnorat"
-          partlycloudy: "Este parțial înnorat"
+          cloudy: "Este noros"
+          partlycloudy: "Este parțial noros"
           rainy: "Plouă"
           pouring: "Plouă torențial"
           lightning: "Este furtună cu descărcări electrice"
