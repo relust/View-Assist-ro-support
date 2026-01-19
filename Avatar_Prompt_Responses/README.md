@@ -204,10 +204,7 @@ and select the avatar you’ve activated.
 
 Import and install Custom Prompt Responses blueprint.
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/relust/View-Assist-ro-support/main/Avatar_Prompt_Responses/blueprint-custom_prompt_responses.yaml
-)
-
-https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/relust/View-Assist-ro-support/main/Avatar_Prompt_Responses/blueprint-custom_prompt_responses.yaml
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/blueprint-custom_prompt_responses.yaml)
 
 Then, configure the fields as follows:
 
