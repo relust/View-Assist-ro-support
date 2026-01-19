@@ -41,7 +41,7 @@ This allows a natural and personalized interaction flow between the user and the
 
 ### Step 1 — Copy overlay files
 
-Copy the [custom_overlays](https://github.com/dinki/View-Assist/tree/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays) folder and the desired files into your Home Assistant configuration:
+Copy the [custom_overlays](https://github.com/relust/View-Assist-ro-support/tree/main/Avatar_Prompt_Responses/view_assist/custom_overlays) folder and the desired files into your Home Assistant configuration:
 
 `/config/view_assist/`
 
@@ -74,10 +74,9 @@ Download the required HTML and CSS files:
 
 ```
 wget -O /config/view_assist/custom_overlays/overlay.html \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/overlay.html
-
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/overlay.html
 wget -O /config/view_assist/custom_overlays/overlay.css \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/overlay.css
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/overlay.css
 ```
 
 You can also download any avatar GIFs you want to use.
@@ -87,65 +86,65 @@ Only download the ones you need:
 ```
 # Nabu
 wget -O /config/view_assist/custom_overlays/nabu_listen.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/nabu_listen.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/nabu_listen.gif
 wget -O /config/view_assist/custom_overlays/nabu_speech.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/nabu_speech.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/nabu_speech.gif
 ```
 
 ```
 # Alexa
 wget -O /config/view_assist/custom_overlays/alexa_listen.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/alexa_listen.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/alexa_listen.gif
 wget -O /config/view_assist/custom_overlays/alexa_speech.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/alexa_speech.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/alexa_speech.gif
 ```
 
 ```
 # Andromeda
 wget -O /config/view_assist/custom_overlays/andromeda_listen.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/andromeda_listen.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/andromeda_listen.gif
 wget -O /config/view_assist/custom_overlays/andromeda_speech.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/andromeda_speech.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/andromeda_speech.gif
 ```
 
 ```
 # Computer
 wget -O /config/view_assist/custom_overlays/computer_listen.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/computer_listen.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/computer_listen.gif
 wget -O /config/view_assist/custom_overlays/computer_speech.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/computer_speech.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/computer_speech.gif
 ```
 
 ```
 # Computer 2
 wget -O /config/view_assist/custom_overlays/computer2_listen.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/computer2_listen.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/computer2_listen.gif
 wget -O /config/view_assist/custom_overlays/computer2_speech.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/computer2_speech.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/computer2_speech.gif
 ```
 
 ```
 # GLaDOS
 wget -O /config/view_assist/custom_overlays/glados_listen.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/glados_listen.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/glados_listen.gif
 wget -O /config/view_assist/custom_overlays/glados_speech.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/glados_speech.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/glados_speech.gif
 ```
 
 ```
 # Jarvis
 wget -O /config/view_assist/custom_overlays/jarvis_listen.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/jarvis_listen.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/jarvis_listen.gif
 wget -O /config/view_assist/custom_overlays/jarvis_speech.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/jarvis_speech.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/jarvis_speech.gif
 ```
 
 ```
 # Sheila
 wget -O /config/view_assist/custom_overlays/sheila_listen.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/sheila_listen.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/sheila_listen.gif
 wget -O /config/view_assist/custom_overlays/sheila_speech.gif \
-  https://raw.githubusercontent.com/dinki/View-Assist/main/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/view_assist/custom_overlays/sheila_speech.gif
+  https://raw.githubusercontent.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/view_assist/custom_overlays/sheila_speech.gif
 ```
 
 #### Enable avatars in overlay.html
@@ -185,7 +184,7 @@ and select the avatar you’ve activated.
 
 Import and install Custom Prompt Responses blueprint.
 
-[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/dinki/View-Assist/blob/dev/View_Assist_custom_sentences/community_contributions/Avatar_Prompt_Responses/blueprint-custom_prompt_responses.yaml)
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/relust/View-Assist-ro-support/blob/main/Avatar_Prompt_Responses/blueprint-custom_prompt_responses.yaml)
 
 Then, configure the fields as follows:
 
