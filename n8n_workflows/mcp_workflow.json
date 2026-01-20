@@ -1,0 +1,244 @@
+{
+  "name": "MCP Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "qwen3-vl:8b-instruct-q4_K_M",
+          "mode": "list",
+          "cachedResultName": "qwen3-vl:8b-instruct-q4_K_M"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        160
+      ],
+      "id": "9737136b-6d05-44aa-8e2a-ccef95ca62c8",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "4T6CMVFgfd3u5E8l",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "chat",
+        "responseMode": "streaming",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -864,
+        32
+      ],
+      "id": "7078e045-26a0-4723-902e-d5f766365725",
+      "name": "Webhook",
+      "webhookId": "d2e3e4c3-581f-46f3-ae02-421b84a2c5c1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.query }} \n",
+        "options": {
+          "systemMessage": "=Exposed entities:\nformat: name(entity_id)state\n{{ $json.exposed_entities }}\n\nTools and Execution Rules\n\nMandatory search rules (VERY IMPORTANT)\n\nWhen I ask you for information that can be found on the web, use ”Search in Tavily” and the script for display on tablet ”view_assist_llm_script_show_webpage” — ONLY if a valid site URL was found\n\nWhen I ask you for information that can be found on the web, use ”Search in Tavily” and the script for display on tablet ”view_assist_llm_script_show_webpage” — ONLY if a valid site URL was found\n\nMy current location is: Holboca/Iași 47°10'11.9\"N 27°41'19.1\"E\n\nFor distances use: https://distanta.ro/, \nhttps://distantarutiera.ro\n\nFor restaurants use: https://ialoc.ro/\n\nPrefix your query to ”Search in Tavily” with the word \"site\" (e.g., \"Site cartofi prăjiți , site Distanța Iași/București, site cele mai apropiate restaurante de iași).\n\n\n\nUnderstand the user's request even if it contains transcription errors, and send a clear query to SerpApi.\n\nYou will receive multiple URLs — select only one that best matches the user’s request.\n\nYou MUST extract the URL from a REAL search result.\n\nAccept ONLY URLs coming from:\n\norganic_results[].link\n\nor a clearly provided source URL\n\nForbidden behavior\n\nDo NOT invent URLs.\n\nDo NOT guess domains.\n\nDo NOT construct URLs manually.\n\nDo NOT shorten URLs.\n\nDo NOT use \"...\" in URLs.\n\nIf SerpApi does NOT return a valid URL, you MUST NOT call the script.\n\nURL requirements\n\nThe URL MUST:\n\nstart with https://\n\nbe a complete absolute URL\n\nbe copied EXACTLY as returned by SerpApi\n\npoint to a real web page (not search results)\n\nbe likely iframe-compatible\n\nYou must select and return the single most relevant URL from the SerpApi results that matches the user’s request.\n\nCall view_assist_llm_script_show_webpage ONLY if all rules above are satisfied.\n\nYou MUST provide:\n\nurl: FULL and EXACT URL from SerpApi\n\ndevice_id: {{ $json.body.device_id }}\n\nresponse: a short spoken response describing the opened page\n\nDefault view path: /view-assist/webpage\n\nOutput rules\n\nFor script execution, send the response ONLY via the script.\n\nDo NOT repeat the response outside the tool call.\n\nDo NOT use emojis.\n\nRespond in Romanian.",
+          "enableStreaming": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        -160
+      ],
+      "id": "8284ae97-1889-49b1-af6e-50592e87c410",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -96,
+        -80
+      ],
+      "id": "557c72a3-e065-4eb2-bf39-5beaabebc2c6",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "let entities = $json.body.exposed_entities || $json.payload;\n\nif (!entities) {\n    throw new Error('Kein Feld \"exposed_entities\" oder \"payload\" im Input gefunden.');\n}\n\n// JSON-String → Objekt\nif (typeof entities === 'string') {\n    try {\n        entities = JSON.parse(entities);\n    } catch {\n        throw new Error('Das Feld \"exposed_entities\" ist kein gültiges JSON.');\n    }\n}\n\n// Objekt mit numerischen Keys → Array\nif (!Array.isArray(entities) && typeof entities === 'object') {\n    entities = Object.values(entities);\n}\n\n// Formatierung: nur Name (entity_id): state\nconst formattedLines = entities\n    .filter(e => e && (e.name || e.entity_id)) // leere Einträge überspringen\n    .map(e => {\n        const name = (e.name || e.entity_id).toString().trim();\n        const id = (e.entity_id || 'unknown.entity').toString().trim();\n        const state = (e.state ?? 'unknown').toString().trim();\n        return `${name} (${id}): ${state}`;\n    });\n\n// Optional: alphabetisch sortieren\nformattedLines.sort();\n\n// Alles als Textblock\nconst output_text = formattedLines.join('\\n');\n\n// Rückgabe im gewünschten Feld \"exposed_entities\"\nreturn [\n    {\n        json: {\n            exposed_entities: output_text\n        }\n    }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -464,
+        -144
+      ],
+      "id": "08601fee-773c-437a-bf72-6b29e151dff7",
+      "name": "Entities"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://192.168.0.149:8123/mcp_server/sse",
+        "serverTransport": "sse",
+        "authentication": "bearerAuth",
+        "include": "selected",
+        "includeTools": [
+          "HassTurnOn",
+          "HassTurnOff",
+          "HassSetPosition",
+          "view_assist_llm_script_show_webpage",
+          "care_este_vremea_script"
+        ],
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        384,
+        160
+      ],
+      "id": "b6a5d51a-3b3a-4526-8e22-be90d2f7147f",
+      "name": "MCP Tool",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "Sr5YKtnlywt5kkAQ",
+          "name": "Bearer Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+        "options": {
+          "topic": "general",
+          "search_depth": "basic",
+          "chunks_per_source": 3,
+          "max_results": 10,
+          "time_range": "year",
+          "include_favicon": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Include_Favicon', ``, 'boolean') }}",
+          "auto_parameters": false,
+          "country": "romania"
+        }
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavilyTool",
+      "typeVersion": 1,
+      "position": [
+        560,
+        160
+      ],
+      "id": "93e8752a-4983-41e5-9fef-670fad7262eb",
+      "name": "Search in Tavily",
+      "credentials": {
+        "tavilyApi": {
+          "id": "JOuiCsK81accs6sL",
+          "name": "Tavily account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Entities",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Entities": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search in Tavily": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5f3f6085-065c-43c9-9dc4-d2e234faaf6c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3a2f1ce3274dfbdd031bfdf4eec60c0c97dd6e7d8b2b828693b6440954dd8a87"
+  },
+  "id": "HRfJMsX5Xm3SSdmh",
+  "tags": []
+}
