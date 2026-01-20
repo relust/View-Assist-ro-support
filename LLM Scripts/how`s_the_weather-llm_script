@@ -1,0 +1,9 @@
+alias: View Assist - How's the Weather? - Llm script
+description: A script that is called when someone wants to know about the weather status
+sequence:
+  - action: conversation.process
+    metadata: {}
+    data:
+      text: How's the Weather?
+      agent_id: conversation.home_assistant
+icon: mdi:oil-temperature
