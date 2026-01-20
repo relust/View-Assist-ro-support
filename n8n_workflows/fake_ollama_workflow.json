@@ -1,0 +1,233 @@
+{
+  "name": "Fake Ollama Nodes",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "api/version",
+        "options": {
+          "responseData": "{\"version\": \"0.12.10\" }"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        208,
+        64
+      ],
+      "id": "ef5f738b-11b8-44e7-841c-a1f17a0bb88f",
+      "name": "GET version",
+      "webhookId": "dea91789-d01f-4984-bdc5-92bd3a23b401"
+    },
+    {
+      "parameters": {
+        "path": "api/tags",
+        "options": {
+          "responseData": "{\n  \"models\": [\n    {\n      \"name\": \"hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:Q4_K_M\",\n      \"model\": \"hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:Q4_K_M\",\n      \"modified_at\": \"2025-11-11T00:00:00Z\",\n      \"size\": 2500000000,\n      \"digest\": \"5611a5f21404\",\n      \"details\": {\n        \"parent_model\": \"\",\n        \"format\": \"gguf\",\n        \"family\": \"qwen3\",\n        \"families\": [\"qwen3\"],\n        \"parameter_size\": \"4B\",\n        \"quantization_level\": \"Q4_K_M\"\n      }\n    },\n    {\n      \"name\": \"hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:Q6_K\",\n      \"model\": \"hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:Q6_K\",\n      \"modified_at\": \"2025-11-11T00:00:00Z\",\n      \"size\": 3300000000,\n      \"digest\": \"112e44f591f1\",\n      \"details\": {\n        \"parent_model\": \"\",\n        \"format\": \"gguf\",\n        \"family\": \"qwen3\",\n        \"families\": [\"qwen3\"],\n        \"parameter_size\": \"4B\",\n        \"quantization_level\": \"Q6_K\"\n      }\n    }\n  ]\n}\n"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        560,
+        64
+      ],
+      "id": "20fb58ba-9474-4f3e-b6b2-9bad50570e3a",
+      "name": "List Models",
+      "webhookId": "debd2b1d-e5d8-4ca4-bc45-ea971204c55a"
+    },
+    {
+      "parameters": {
+        "content": "## Ollama Integration Initialization\n",
+        "height": 220,
+        "width": 840
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3608058a-7a22-441e-8e48-ea57e96ce0e3",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "api/chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -736,
+        480
+      ],
+      "id": "c7c915d0-5239-47fb-b595-d36556361f85",
+      "name": "Chat",
+      "webhookId": "074967ba-308b-4623-8b26-a8cace260047"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1056,
+        480
+      ],
+      "id": "43dd54e3-608a-4dec-bc8b-fa87ea496e42",
+      "name": "Respond to Webhook",
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.messages[1].content }}\n\n",
+        "options": {
+          "systemMessage": "=You are a Home Assistant voice assistant.\nUse ONLY the compact fields in the incoming JSON: exposed_entities, tools\n\nEXPOSED ENTITIES:\nAplica din birou: light.aplica_din_birou\nVeioza din birou: light.veioza_din_birou\n\nTOOLS:\nHassTurnOn for turn on devices (lights, switches) (arguments: name, entity_id, domain, area)\nHassTurnOff for turn off devices (lights, switches) (arguments: name, entity_id, domain, area)\n\n\n\nRules:\n- If asking a question, set continue_conversation:true and end content with \"?\".\n- If performing action, set done:true, continue_conversation:false.\n- Response JSON (MUST RETURN single top-level object):\n{\n  \"role\":\"assistant\",\n  \"content\":\"<string>\",\n  \"tool_calls\":[...],\n  \"done\": boolean,\n  \"continue_conversation\": boolean,\n  \"response_type\":\"<action_done|action_failed|info|error>\"\n}\n- Tool call format:\n  {\n    \"type\":\"function\",\n    \"function\": {\n      \"index\":0,\n      \"name\":\"<ToolName from tools>\",\n      \"arguments\": { ... }\n  }\n\nthink: false\n/no_think"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        528,
+        480
+      ],
+      "id": "48d5c046-0162-4959-8c0e-3c51a745c37f",
+      "name": "AI Agent",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "qwen3-vl:8b-instruct-q4_K_M",
+          "mode": "list",
+          "cachedResultName": "qwen3-vl:8b-instruct-q4_K_M"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        352,
+        800
+      ],
+      "id": "8422c040-feb7-4649-aaba-2c7d6e694a68",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "4T6CMVFgfd3u5E8l",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Chat Node",
+        "height": 180,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -832,
+        432
+      ],
+      "typeVersion": 1,
+      "id": "58b378f5-5188-45ab-91c8-c38e110a3bce",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "Response Node",
+        "height": 200
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        992,
+        432
+      ],
+      "typeVersion": 1,
+      "id": "922ff8d1-571d-4760-9b39-afb053db11e5",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "jsCode": "let outputStr = $json[\"output\"] || $json[\"text\"];\n\n\noutputStr = outputStr.replace(/\"content\":\"([^\"]*)\":\"([^\"]*)\"/g, '\"content\":\"$1: $2\"');\n\nlet parsed;\ntry {\n  parsed = JSON.parse(outputStr);\n} catch(err) {\n\n  parsed = { content: outputStr };\n}\n\nreturn {\n  json: {\n    model: $json[\"generationInfo\"]?.model_name || \"hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:Q6_K\",\n    created_at: new Date().toISOString(),\n    message: parsed,\n    done: true,\n    continue_conversation: parsed?.continue_conversation ?? false\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        480
+      ],
+      "id": "f79d8f66-dea9-4802-bb83-bb492c22ab69",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Chat": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "0ccde21d-5218-4764-bdab-d92ce67f9019",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3a2f1ce3274dfbdd031bfdf4eec60c0c97dd6e7d8b2b828693b6440954dd8a87"
+  },
+  "id": "paT3H3fb9JDil4Pj",
+  "tags": []
+}
