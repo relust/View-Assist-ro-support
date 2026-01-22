@@ -24,3 +24,4 @@ This blueprint creates a **Home Assistant script** for LLMs to navigate the last
 ```yaml
 # Example automation to update last satellite and call the script:
 # (add your automation here)
+https://github.com/relust/View-Assist-ro-support/blob/main/LLM_scripts/blueprint-set_last_active_satellite.yaml
