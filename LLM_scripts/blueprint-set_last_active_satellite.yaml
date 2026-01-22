@@ -1,0 +1,39 @@
+blueprint:
+  name: View Assist - Set Last Active Satellite
+  description: >
+    Stores the device_id of the last active View Assist satellite
+    in a helper input_text. Useful for LLM scripts to know
+    which satellite was used last.
+  domain: automation
+  input:
+    satellites:
+      name: Voice Assist Satellites
+      description: >
+        Select one or more assist satellite entities to track
+        the last active device.
+      selector:
+        entity:
+          domain: assist_satellite
+          multiple: true
+
+    last_satellite_helper:
+      name: Last Active Satellite Helper
+      description: >
+        The input_text helper to store the last active satellite device_id.
+      selector:
+        entity:
+          domain: input_text
+
+mode: single
+
+trigger:
+  - platform: state
+    entity_id: !input satellites
+    to: listening
+
+action:
+  - service: input_text.set_value
+    target:
+      entity_id: !input last_satellite_helper
+    data:
+      value: "{{ device_id(trigger.entity_id) }}"
