@@ -1,3 +1,6 @@
+# View Assist - What's the Weather - LLM Script
+
+
 This blueprint creates a **Home Assistant script** for LLMs to navigate the last active View Assist satellite to the weather dashboard view.
 
 ## Key Points
@@ -12,7 +15,6 @@ This blueprint creates a **Home Assistant script** for LLMs to navigate the last
 2. Import the script blueprint:
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/relust/View-Assist-ro-support/blob/main/LLM_scripts/Whats_The_Weather/blueprint-whats_the_weather_llm_script.yaml)
-# View Assist - What's the Weather - LLM Script
 
 3. Configure the inputs:
    - `Weather view path` → default: `/view-assist/weather`
