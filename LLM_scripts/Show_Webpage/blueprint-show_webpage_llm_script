@@ -1,0 +1,58 @@
+alias: View Assist – Show Webpage - LLM script
+description: >
+  Script used by LLMs to display a web page on a View Assist satellite. The web
+  page must be iframe-compatible. The LLM must provide: - the URL of the web
+  page to open - the device_id from the conversation trigger, passed to the
+  device_id field - the response for executed task.
+mode: single
+fields:
+  url:
+    name: Webpage URL
+    description: Webpage to display (must be iframe-compatible)
+    example: https://jamilacuisine.ro/
+    required: true
+  view_path:
+    name: View path
+    description: View Assist dashboard view used for displaying the webpage
+    example: /view-assist/webpage
+    default: /view-assist/webpage
+    required: false
+  device_id:
+    name: Device id
+    description: Device_id of the View Assist satellite that initiated the request
+    example: efb66e6d8ea752c1bfb1c15b27e10d8b
+    required: true
+  response:
+    name: Response
+    description: The text response for executed tool
+    example: Aceasta este pagina web
+    required: true
+sequence:
+  - variables:
+      target_satellite_device: "{{ view_assist_entity(device_id) }}"
+      view: "{{ view_path | default('/view-assist/webpage') }}"
+      hold_mode: true
+  - action: view_assist.set_state
+    target:
+      entity_id: "{{ target_satellite_device }}"
+    data:
+      url: "{{ url }}"
+  - action: view_assist.navigate
+    data:
+      device: "{{ target_satellite_device }}"
+      path: "{{ view }}"
+  - if:
+      - condition: template
+        value_template: "{% if hold_mode %}true{%endif%}"
+    then:
+      - action: view_assist.set_state
+        target:
+          entity_id: "{{ target_satellite_device }}"
+        data:
+          mode: hold
+  - set_conversation_response: "{{ response }}"
+  - action: view_assist.set_state
+    target:
+      entity_id: "{{ target_satellite_device }}"
+    data:
+      last_said: "{{ response }}"
