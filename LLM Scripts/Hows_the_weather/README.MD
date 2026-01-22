@@ -1,6 +1,0 @@
-If you want to download llm script blueprint for what`s the weather sentence click this button:
-
-
-[![Import the What's the Weather LLM Script](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/relust/View-Assist-ro-support/main/LLM%20Scripts/Hows_the_weather/blueprint-hows_the_weather_llm_script.yaml)
-
-
