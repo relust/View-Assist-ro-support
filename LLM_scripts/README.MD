@@ -11,11 +11,6 @@ To solve this (in ~99% of real-world cases), this repository uses a simple and r
 2. An **automation** updates this helper whenever any selected assist satellite enters the `listening` state.
 3. All LLM scripts then read this helper to know **which satellite to control or navigate**.
 
-This approach avoids:
-- Tight coupling to any specific LLM integration  
-- Token-heavy function schemas (as seen in some LLM integrations)
-- Compatibility issues across different AI providers
-
 ---
 
 ### Step 1: Create the Text Helper
