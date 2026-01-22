@@ -19,7 +19,10 @@ This blueprint creates a **Home Assistant script** for LLMs to navigate the last
    - `Last active satellite input_text` → your `input_text` helper
    - `LLM Description` → used by the LLM to understand the script's purpose
 
-4. **Create an automation** to update the helper with the last active satellite whenever needed, 
+4. **Create an automation** to update the helper with the last active satellite whenever needed
+
+
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/relust/View-Assist-ro-support/blob/main/LLM_scripts/blueprint-set_last_active_satellite.yaml)
+
 
 5. Then instruct the LLM to execute the script it if weather info is requested.
