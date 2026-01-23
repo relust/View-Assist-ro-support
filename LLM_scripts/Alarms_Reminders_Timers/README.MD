@@ -217,9 +217,10 @@ Add this to your `configuration.yaml` or included templates file:
 
 - Replace **your View Assist satellite sensor** where indicated:
 
-```yaml
+```
 # Replace with your satellite sensor
 satellite_sensor: sensor.view_assist_office_satellite
+```
 Expose this sensor to your voice assistant / LLM and it will be able to answer correctly:
 The template sensor will show:
 
