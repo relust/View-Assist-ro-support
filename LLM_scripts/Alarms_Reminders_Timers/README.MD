@@ -166,61 +166,36 @@ Create a **template sensor** that:
 ## Example template sensor
 
 ```yaml
-template:
-  - trigger:
-      - platform: time_pattern
-        seconds: "/10"
+sensor:
+  - platform: template
+    sensors:
+      timers_office_satellite:
+        friendly_name: "Active timers – Office Satellite"
+        icon_template: mdi:timer
 
-    sensor:
-      - name: "Active timers – Office satellite"
-        unique_id: timers_view_assist_office_satellite
-        icon: mdi:timer
+        # CHANGE THIS to your view_assist satellite sensor entity_id
+        value_template: >
+          {% set SATELLITE_SENSOR = 'sensor.office_satellite' %}
+          {% set timers = state_attr(SATELLITE_SENSOR, 'timers') %}
 
-        # CHANGE this to your View Assist satellite sensor
-        state: >
-          {% set satellite = 'sensor.view_assist_office_satellite' %}
-          {% set timers = state_attr(satellite, 'timers') %}
           {% if not timers %}
-            No active timers
+            Active timers: 0
           {% else %}
-            {{ timers | count }} active
+            Active timers: {{ timers | count }}
+            {% for t in timers %}
+              | {{ t.name if t.name else 'Unnamed' }}
+              ({{ t.timer_class }})
+              expires at {{ as_timestamp(t.expires) | timestamp_custom('%H:%M', true) }}
+            {% endfor %}
           {% endif %}
-
-        # CHANGE this to the same satellite sensor
-        attributes:
-          timers: >
-            {% set satellite = 'sensor.view_assist_office_satellite' %}
-            {% set timers = state_attr(satellite, 'timers') %}
-            {% if not timers %}
-              []
-            {% else %}
-              {% set now_ts = now().timestamp() %}
-              {% set result = [] %}
-              {% for t in timers %}
-                {% set expires = as_timestamp(t.expires) %}
-                {% set remaining = expires - now_ts %}
-                {% if remaining > 0 %}
-                  {% set minutes = (remaining // 60) | int %}
-                  {% set seconds = (remaining % 60) | int %}
-                  {% set label =
-                    (t.name if t.name else 'Unnamed') ~
-                    ' (' ~ t.timer_class ~ ') – ' ~
-                    minutes ~ 'm ' ~ seconds ~ 's remaining'
-                  %}
-                  {% set result = result + [ label ] %}
-                {% endif %}
-              {% endfor %}
-              {{ result }}
-            {% endif %}
 ```
 Add this to your `configuration.yaml` or included templates file:
 
 - Replace **your View Assist satellite sensor** where indicated:
 
-The template sensor will show:
+The template sensor will show: number of active timers, list of timers with name, type, and expiration time
 
-State: number of active timers (2 active / No active timers)
-Attributes: list of timers with name, type, and remaining time
+Example: Active timers: 1 | make a coffe (reminder) expires at 13:36
 
 ## Expose to voice assistants
 
