@@ -217,7 +217,6 @@ Add this to your `configuration.yaml` or included templates file:
 
 - Replace **your View Assist satellite sensor** where indicated:
 
-Expose this sensor to your voice assistant / LLM and it will be able to answer correctly:
 The template sensor will show:
 
 State: number of active timers (2 active / No active timers)
