@@ -213,11 +213,30 @@ template:
               {{ result }}
             {% endif %}
 ```
+Add this to your `configuration.yaml` or included templates file:
 
+- Replace **your View Assist satellite sensor** where indicated:
+
+```yaml
+# Replace with your satellite sensor
+satellite_sensor: sensor.view_assist_office_satellite
 Expose this sensor to your voice assistant / LLM and it will be able to answer correctly:
+The template sensor will show:
+
+State: number of active timers (2 active / No active timers)
+Attributes: list of timers with name, type, and remaining time
+
+##Expose to voice assistants
+
+Go to Settings → Voice assistants → Expose
+
+The LLM can now correctly answer queries like:
 
 “What timers are active?”
-“How much time is left on my alarm?” 
+
+“How much time is left on my alarm?”
+
+This sensor is read-only; timer creation, cancellation, and snoozing are handled via the LLM script.
                      
 
                      
