@@ -217,17 +217,13 @@ Add this to your `configuration.yaml` or included templates file:
 
 - Replace **your View Assist satellite sensor** where indicated:
 
-```
-# Replace with your satellite sensor
-satellite_sensor: sensor.view_assist_office_satellite
-```
 Expose this sensor to your voice assistant / LLM and it will be able to answer correctly:
 The template sensor will show:
 
 State: number of active timers (2 active / No active timers)
 Attributes: list of timers with name, type, and remaining time
 
-##Expose to voice assistants
+## Expose to voice assistants
 
 Go to Settings → Voice assistants → Expose
 
