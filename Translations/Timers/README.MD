@@ -8,7 +8,7 @@ inclusiv expresii vocale imperfecte generate de STT.
 
 ## 1️⃣ Instalare fișier traducere
 
-Copiază fișierul (ro.json)[https://github.com/relust/View-Assist-ro-support/blob/main/Translations/Timers/ro.json] în următoarea locație:
+Copiază fișierul [ro.json](https://github.com/relust/View-Assist-ro-support/blob/main/Translations/Timers/ro.json) în următoarea locație:
 
 `/config/custom_components/view_assist/js_modules/translations/timers/ro.json`
 
