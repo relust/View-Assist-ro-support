@@ -23,7 +23,7 @@ După ce imporți blueprintul View Assist:
 
 ### Varianta A – din interfață
 - Deschide automatizarea
-- Înlocuiește comenzile în limba engleză cu cele în limba română
+- Înlocuiește comenzile în limba engleză cu cele în limba română de [aici](https://github.com/relust/View-Assist-ro-support/blob/main/Translations/Timers/automation_ro_trigger_sentences)
 - Salvează
 
 ### Varianta B – YAML (recomandat)
