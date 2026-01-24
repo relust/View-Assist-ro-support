@@ -31,7 +31,7 @@ După ce imporți blueprintul View Assist:
 - Selectează **Take control**
 - Intră în **Editare în YAML**
 - Înlocuiește secțiunea `triggers:` cu cea din [acest fișier](https://github.com/relust/View-Assist-ro-support/blob/main/Translations/Timers/automation_ro_trigger_sentences)
-
+- Salvează
 ---
 
 ## 3️⃣ Exemple de comenzi vocale acceptate
