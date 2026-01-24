@@ -1,0 +1,88 @@
+triggers:
+  - command:
+      - setează un timer pentru {when}
+      - pornește un timer pentru {when}
+      - setează un temporizator pentru {when}
+      - pornește temporizatorul pentru {when}
+      - setează un timer {name} pentru {when}
+    id: timer
+    trigger: conversation
+  - command:
+      - reamintește-mi {name} peste {when}
+      - reamintește-mi {name} la {when}
+      - setează un reminder pentru {when}
+      - setează un reminder {name} la {when}
+      - adu-mi aminte {name} în {when}
+      - adu-mi aminte la {when} să {name}
+    id: reminder
+    trigger: conversation
+  - command:
+      - setează o alarmă pentru {when}
+      - setează alarma pentru {when}
+      - setează o alarmă {name} la {when}
+      - setează o alarmă să {name} la {when}
+      - setează alarma pentru mâine la {when}
+      - pune o alarmă la {when}
+    id: alarm
+    trigger: conversation
+  - command:
+      - listează timerele
+      - listează alarmele
+      - listează reminderele
+      - ce timere sunt setate
+      - ce alarme sunt setate
+    id: listtimers
+    trigger: conversation
+  - command:
+      - arată timerele
+      - arată alarmele
+      - arată reminderele
+    id: showtimers
+    trigger: conversation
+  - command:
+      - amână alarma
+      - amână timerul
+      - amână reminderul
+    id: snoozealarm
+    trigger: conversation
+  - command:
+      - cât timp a mai rămas din alarmă
+      - cât timp a mai rămas din timer
+      - cât timp a mai rămas din reminder
+      - cât timp mai este până sună alarma
+    id: timeremaining
+    trigger: conversation
+  - command:
+      - anulează alarma
+      - anulează timerul
+      - anulează reminderul
+      - oprește alarma
+      - oprește timerul
+      - oprește reminderul
+      - anulează alarma {name}
+      - anulează timerul {name}
+      - anulează reminderul {name}
+    id: canceltimer
+    trigger: conversation
+  - event_type: va_timer_warning
+    id: timerwarning
+    trigger: event
+    alias: When viewassist event warning expired fires
+  - event_type: va_timer_expired
+    id: ringalarm
+    trigger: event
+    alias: When viewassist event timer expired fires
+  - alias: When SNOOZE button pressed
+    event_type: viewassist
+    trigger: event
+    id: snoozealarm
+    enabled: true
+    event_data:
+      command: snooze alarm
+  - alias: When DISMISS button pressed
+    event_type: viewassist
+    trigger: event
+    id: dismissalarm
+    enabled: true
+    event_data:
+      command: dismiss alarm
