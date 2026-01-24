@@ -34,8 +34,7 @@ The script is designed to be executed **by an LLM**, but it can also be run manu
 
 You can install the required automation using this blueprint:
 
-👉 [Set Last Active Satellite Blueprint](https://github.com/relust/View-Assist-ro-support/blob/main/LLM_scripts/blueprint-set_last_active_satellite.yaml)
-
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/relust/View-Assist-ro-support/blob/main/LLM_scripts/blueprint-set_last_active_satellite.yaml)
 ---
 
 ## Installation
