@@ -71,7 +71,7 @@ Fișierul `ro.json` este adaptat pentru a **accepta toate aceste variante**
 
 - Expresii gramatical incorecte sunt acceptate intenționat
 - Scopul este robustețea, nu purismul lingvistic
-- Funcționează cu mai multe motoare STT (Whisper, Google, Android)
+- Funcționează cu mai multe motoare STT
 
 ---
 
