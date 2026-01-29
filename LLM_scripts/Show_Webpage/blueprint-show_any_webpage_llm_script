@@ -61,7 +61,7 @@ fields:
       that can be displayed on screen. Do NOT invent websites and do NOT use search
       pages or special web apps like Google Search or Google Maps.
 
-      When the page is valid and displayed, include relevant information from the
+      When the page is valid and displayed, include a summary of relevant informations from the
       page content in the spoken response. Do not say only that the page was shown.
 
       If no suitable displayable webpage exists, do not execute this script.
