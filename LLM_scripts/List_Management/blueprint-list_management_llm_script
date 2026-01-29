@@ -1,0 +1,186 @@
+blueprint: 
+  name: View Assist – List Management – LLM Script
+  domain: script
+  author: Relu
+  description: >
+    Script helper for managing a shopping list using View Assist.
+    Can be called by an LLM or manually from Developer Tools.
+
+    SUPPORTED ACTIONS:
+    - Add items to the shopping list
+    - Remove items from the shopping list
+    - Show the items from list (LLM handles spoken response)
+    
+    REQUIREMENTS:
+    - [View Assist integration](https://github.com/dinki/view_assist_integration)
+    - Recommended: [View Assist Companion App](https://github.com/msp1974/ViewAssist_Companion_App)
+    - input_text helper to store the last active satellite
+    - Automation to update last active satellite:
+      [Set Last Active Satellite Blueprint](https://github.com/relust/View-Assist-ro-support/blob/main/LLM_scripts/blueprint-set_last_active_satellite.yaml)
+
+
+  homeassistant:
+    min_version: 2024.6.0
+
+  input:
+    last_satellite_input_text:
+      name: Last active satellite input_text
+      description: >
+        input_text helper that stores the device_id of the last active
+        View Assist satellite.
+      default: input_text.last_used_satellite_device_id
+      selector:
+        entity:
+          domain: input_text
+
+    list_entity:
+      name: Shopping list entity
+      description: >
+        The todo list entity that will be managed by this script.
+      default: todo.lista_de_cumparaturi
+      selector:
+        entity:
+          domain: todo
+
+    view_path:
+      name: Shopping list view path
+      description: >
+        Dashboard view path shown when the shopping list is displayed.
+      default: /view-assist/list
+      selector:
+        text:
+
+    max_items_readout:
+      name: Maximum Items to Read Out
+      description: Number of items to read out loud (0 = all)
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 1
+
+    reverse_spoken_list:
+      name: Reverse Spoken List
+      description: Reverse the list order before speaking it during (speaks newest items first)
+      default: false
+      selector:
+        boolean: {}
+
+mode: parallel
+max_exceeded: silent
+
+fields:
+  action_type:
+    name: Action
+    description: >
+      Shopping list management script for View Assist.
+      Select one action only:
+
+      • add_item – Adds the specified item to the shopping list.
+      • remove_item – Removes the specified item from the shopping list (case-insensitive).
+      • show_list – Shows the current shopping list on the dashboard; LLM handles the spoken response.
+
+    selector:
+      select:
+        multiple: false
+        options:
+          - add_item
+          - remove_item
+          - show_list
+    required: true
+
+  item:
+    name: Item name
+    description: >
+      Name of the item to add or remove from the shopping list.
+      Required for add_item and remove_item, must be empty for show_list.
+
+    selector:
+      text:
+    required: false
+
+sequence:
+  - variables:
+      last_satellite_entity: !input last_satellite_input_text
+      satellite_entity: "{{ view_assist_entity(states(last_satellite_entity)) }}"
+      satellite_type: "{{ state_attr(satellite_entity, 'type') }}"
+      list_entity: !input list_entity
+      view: !input view_path
+      max_items: !input max_items_readout
+      reverse_list: !input reverse_spoken_list
+
+  - choose:
+
+      # ADD ITEM
+      - conditions: "{{ action_type == 'add_item' }}"
+        sequence:
+          - action: todo.add_item
+            target:
+              entity_id: "{{ list_entity }}"
+            data:
+              item: "{{ item | title }}"
+
+          - if:
+              - "{{ satellite_type != 'audio_only' }}"
+            then:
+              - action: view_assist.set_state
+                target:
+                  entity_id: "{{ satellite_entity }}"
+                data:
+                  list: "{{ list_entity }}"
+              - action: view_assist.navigate
+                data:
+                  device: "{{ satellite_entity }}"
+                  path: "{{ view }}"
+
+      # REMOVE ITEM (case-insensitive)
+      - conditions: "{{ action_type == 'remove_item' }}"
+        sequence:
+          - action: todo.get_items
+            data:
+              entity_id: "{{ list_entity }}"
+              status: needs_action
+            response_variable: list_items
+
+          - variables:
+              item_to_remove: >
+                {{ list_items[list_entity]['items']
+                  | map(attribute='summary')
+                  | select('match', '^' ~ item ~ '$', ignorecase=True)
+                  | first | default('') }}
+
+          - action: todo.remove_item
+            target:
+              entity_id: "{{ list_entity }}"
+            data:
+              item: "{{ item_to_remove }}"
+
+          - if:
+              - "{{ satellite_type != 'audio_only' }}"
+            then:
+              - action: view_assist.set_state
+                target:
+                  entity_id: "{{ satellite_entity }}"
+                data:
+                  list: "{{ list_entity }}"
+              - action: view_assist.navigate
+                data:
+                  device: "{{ satellite_entity }}"
+                  path: "{{ view }}"
+
+      # SHOW LIST
+      - conditions: "{{ action_type == 'show_list' }}"
+        sequence:
+          - if:
+              - "{{ satellite_type != 'audio_only' }}"
+            then:
+              - action: view_assist.set_state
+                target:
+                  entity_id: "{{ satellite_entity }}"
+                data:
+                  list: "{{ list_entity }}"
+              - action: view_assist.navigate
+                data:
+                  device: "{{ satellite_entity }}"
+                  path: "{{ view }}"
