@@ -12,10 +12,11 @@ blueprint:
     - Optional hold mode to prevent automatic view switching
 
     REQUIREMENTS:
-    - View Assist integration
-    - Optional: View Assist Companion App
+    - [View Assist integration](https://github.com/dinki/view_assist_integration)
+    - Recommended: [View Assist Companion App](https://github.com/msp1974/ViewAssist_Companion_App)
     - input_text helper to store the last active satellite
-    - Automation to update last active satellite
+    - Automation to update last active satellite:
+      [Set Last Active Satellite Blueprint](https://github.com/relust/View-Assist-ro-support/blob/main/LLM_scripts/blueprint-set_last_active_satellite.yaml)
 
   homeassistant:
     min_version: 2024.6.0
