@@ -1,0 +1,99 @@
+blueprint:
+  name: View Assist – Show Any Webpage – LLM Script
+  domain: script
+  author: Relu
+  description: >
+    Script helper for displaying a webpage on View Assist capable devices.
+    Designed to be called by an LLM or manually from Developer Tools.
+
+    FUNCTIONALITY:
+    - Opens a webpage inside a View Assist dashboard iframe
+    - Navigates the satellite to the webpage view
+    - Optional hold mode to prevent automatic view switching
+
+    REQUIREMENTS:
+    - View Assist integration
+    - Optional: View Assist Companion App
+    - input_text helper to store the last active satellite
+    - Automation to update last active satellite
+
+  homeassistant:
+    min_version: 2024.6.0
+
+  input:
+    last_satellite_input_text:
+      name: Last active satellite input_text
+      description: >
+        input_text helper that stores the device_id of the last active
+        View Assist satellite.
+      default: input_text.last_used_satellite_device_id
+      selector:
+        entity:
+          domain: input_text
+
+    view_path:
+      name: Webpage view path
+      description: >
+        Dashboard view designed to display a webpage in an iframe.
+      default: /view-assist/webpage
+      selector:
+        text:
+
+    hold_mode:
+      name: Hold Mode
+      description: >
+        Keep the webpage visible and prevent automatic view switching.
+      default: true
+      selector:
+        boolean: {}
+
+mode: parallel
+max_exceeded: silent
+
+fields:
+  url:
+    name: Webpage URL
+    description: >
+      This script is designed to be used by LLMs to display real, static web pages
+      on a View Assist screen.
+
+      Only call this script if you have a verified, existing URL to a real website
+      that can be displayed on screen. Do NOT invent websites and do NOT use search
+      pages or special web apps like Google Search or Google Maps.
+
+      When the page is valid and displayed, include relevant information from the
+      page content in the spoken response. Do not say only that the page was shown.
+
+      If no suitable displayable webpage exists, do not execute this script.
+
+    selector:
+      text:
+    required: true
+
+sequence:
+  - variables:
+      last_satellite_entity: !input last_satellite_input_text
+      satellite_entity: "{{ view_assist_entity(states(last_satellite_entity)) }}"
+      satellite_type: "{{ state_attr(satellite_entity, 'type') }}"
+      view: !input view_path
+      hold: !input hold_mode
+
+  - action: view_assist.set_state
+    target:
+      entity_id: "{{ satellite_entity }}"
+    data:
+      url: "{{ url }}"
+
+  - action: view_assist.navigate
+    data:
+      device: "{{ satellite_entity }}"
+      path: "{{ view }}"
+
+  - if:
+      - "{{ hold }}"
+    then:
+      - action: view_assist.set_state
+        target:
+          entity_id: "{{ satellite_entity }}"
+        data:
+          mode: hold
